@@ -7,7 +7,7 @@
 #include  <Protocol/DiskIo2.h>
 #include  <Protocol/BlockIo.h>
 #include  <Guid/FileInfo.h>
-//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
+//
 struct MemoryMap {
   UINTN buffer_size;
   VOID* buffer;
@@ -114,6 +114,16 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
 
   return EFI_SUCCESS;
 }
+
+drawCircle(EFI_HANDLE imageHandle, int x, int y, int size)
+{
+  EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
+  OpenGOP(imageHandle, gop);
+
+  print("DrawCircle : [X : %d, y : %d]", x, y);
+
+}
+
 
 EFI_STATUS EFIAPI UefiMain(
   EFI_HANDLE image_handle,
