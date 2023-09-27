@@ -1,3 +1,7 @@
+#include "MemoryMap.h"
+#include "ARMv7AR.h"
+
+
 .text
     .code 32
     .global vector_start
@@ -27,8 +31,46 @@
 
 
     reset_handler:
-        LDR R0, =0x10000000
-        LDR R1, [R0]
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_SVC
+        MSR cpsr, r1
+        LDR sp, =SVC_STACK_TOP
+
+        
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_IRQ
+        MSR cpsr, r1
+        LDR sp, =IRQ_STACK_TOP
+
+        
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_FIQ
+        MSR cpsr, r1
+        LDR sp, =FIQ_STACK_TOP
+
+        
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_ABT
+        MSR cpsr, r1
+        LDR sp, =ABT_STACK_TOP
+
+        
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_UND
+        MSR cpsr, r1
+        LDR sp, =UND_STACK_TOP
+
+        
+        MSR r0, cpsr
+        BIC r1, r0, $0x1f
+        ORR r1, r1, #ARM_MODE_BIT_SYS
+        MSR cpsr, r1
+        LDR sp, =USRSYS_STACK_TOP
 
     dummy_handler:
         b .
