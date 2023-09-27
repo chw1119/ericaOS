@@ -1,15 +1,15 @@
-ARCH = armv7e-m
-M_CPU = cortex-m0plus
+ARCH = armv6-m
+M_CPU = cortex-m0
 
-CC = arm-none-abi-gcc
-AS = arm-none-abi-as
-LD = arm-none-abi-ld
-OC = arm-none-abi-objcopy
+CC = arm-none-eabi-gcc
+AS = arm-none-eabi-as
+LD = arm-none-eabi-ld
+OC = arm-none-eabi-objcopy
 
 LINKER_SCRIPT = ./ericaos.ld
 
 ASM_SRCS = $(wildcard boot/*.s)
-ASM_OBJS = $(patsubst boot/%.s, build/%.c, $(ASM_SRCS))
+ASM_OBJS = $(patsubst boot/%.s, build/%.o, $(ASM_SRCS))
 
 ericaos = build/ericaos.axf
 ericaos_bin = build/ericaos.bin
@@ -27,10 +27,10 @@ run: $(ericaos)
 	@echo "run to raspberry pi pico board."
 
 debug: $(ericaos)
-
+	@echo "run to raspberry pi pico board."
 
 gdb: $(ericaos)
-
+	@echo "run to raspberry pi pico board."
 
 $(ericaos): $(ASM_OBJS) $(LINKER_SCRIPT)
 	$(LD) -n -T $(LINKER_SCRIPT) -o $(ericaos) $(ASM_OBJS)
@@ -38,4 +38,4 @@ $(ericaos): $(ASM_OBJS) $(LINKER_SCRIPT)
 
 build/%.o: boot/%.s
 	mkdir -p $(shell dirname $@)
-	$(AS) -march=$(ARCH) -mcpu=$(M_CPU) -g -o $@ $<
+	$(AS) -march=$(ARCH) -mthumb -mcpu=$(M_CPU) -g -o $@ $<

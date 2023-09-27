@@ -2,20 +2,36 @@
 #include "ARMv7AR.h"
 
 
-.text
-    .code 32
+.text    
+    .thumb
+   
     .global vector_start
     .global vector_end
 
     vector_start:
-        LDR PC, reset_handler_addr
-        LDR PC, undef_handler_addr
-        LDR PC, svc_handler_addr
-        LDR PC, pftch_abt_handler_addr
-        LDR PC, data_abt_handler_addr
+        LDR r0, reset_handler_addr
+        BX r0
+
+        LDR r0, undef_handler_addr
+        BX r0
+
+        LDR r0, svc_handler_addr
+        BX r0
+
+        LDR r0, pftch_abt_handler_addr
+        BX r0
+
+        LDR r0, data_abt_handler_addr
+        BX r0
+
         B .
-        LDR PC, irq_handler_addr
-        LDR PC, fiq_handler_addr
+        NOP
+
+        LDR r0, irq_handler_addr
+        BX r0
+
+        LDR r0, fiq_handler_addr
+        BX r0
 
         reset_handler_addr:     .word reset_handler
         undef_handler_addr:     .word dummy_handler
@@ -27,52 +43,16 @@
         
     vector_end:
 
-
-
-
     reset_handler:
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_SVC
-        MSR cpsr, r1
-        LDR sp, =SVC_STACK_TOP
-
-        
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_IRQ
-        MSR cpsr, r1
-        LDR sp, =IRQ_STACK_TOP
-
-        
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_FIQ
-        MSR cpsr, r1
-        LDR sp, =FIQ_STACK_TOP
-
-        
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_ABT
-        MSR cpsr, r1
-        LDR sp, =ABT_STACK_TOP
-
-        
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_UND
-        MSR cpsr, r1
-        LDR sp, =UND_STACK_TOP
-
-        
-        MSR r0, cpsr
-        BIC r1, r0, $0x1f
-        ORR r1, r1, #ARM_MODE_BIT_SYS
-        MSR cpsr, r1
-        LDR sp, =USRSYS_STACK_TOP
+        MRS r0, CONTROL
+        LDR r2, #0x1f
+        BIC r1, r0, r2
+        LDR r2, #ARM_MODE_BIT_SVC
+        ORR r1, r1, r2
+        MSR CPSR, r1
+        LDR sp, =SVC_STACK_TOP 
 
     dummy_handler:
-        b .
+            B .
 
 .end
