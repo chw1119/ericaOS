@@ -49,8 +49,24 @@
     vector_end:
 
     stack_handler:
+        LDMFD   sp!, {r0-r12, lr}
+        SUB     sp, sp, #4
+        LDR     lr, [sp]
+        ADD     sp, sp, #4
+        CPSIE   if
+        BX      lr
+
+
         
-    reset_handler:
+    reset_handler: 
+        LDR     r0, =0x40014000 // GPIO Register 주소
+        MOV     r1, #0x12345678 // 원하는 GPIO 설정 값
+        STR     r1, [r0]        // GPIO 레지스터에 설정 값 저장
+
+        // 예시: UART 초기화
+        LDR     r0, =0x4003F000 // UART Register 주소
+        MOV     r1, #0x56789ABC // 원하는 UART 설정 값
+        STR     r1, [r0]        // UART 레지스터에 설정 값 저장
 
     dummy_handler:
             B .
