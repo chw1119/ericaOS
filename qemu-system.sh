@@ -1,0 +1,1 @@
+qemu-system-arm -M raspi2b -kernel ./build/ericaos.axf  -S -gdb tcp::1234,ipv4

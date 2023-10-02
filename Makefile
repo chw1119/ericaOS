@@ -8,8 +8,8 @@ OC = arm-none-eabi-objcopy
 
 LINKER_SCRIPT = ./ericaos.ld
 
-ASM_SRCS = $(wildcard boot/*.s)
-ASM_OBJS = $(patsubst boot/%.s, build/%.o, $(ASM_SRCS))
+ASM_SRCS = $(wildcard boot/*.S)
+ASM_OBJS = $(patsubst boot/%.S, build/%.o, $(ASM_SRCS))
 
 ericaos = build/ericaos.axf
 ericaos_bin = build/ericaos.bin
@@ -34,8 +34,8 @@ gdb: $(ericaos)
 
 $(ericaos): $(ASM_OBJS) $(LINKER_SCRIPT)
 	$(LD) -n -T $(LINKER_SCRIPT) -o $(ericaos) $(ASM_OBJS)
-	$(OC) -0 binary $(ericaos) $(ericaos_bin)
+	$(OC) -O binary $(ericaos) $(ericaos_bin)
 
-build/%.o: boot/%.s
+build/%.o: boot/%.S
 	mkdir -p $(shell dirname $@)
 	$(AS) -march=$(ARCH) -mthumb -mcpu=$(M_CPU) -g -o $@ $<
