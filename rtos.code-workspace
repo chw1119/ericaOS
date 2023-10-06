@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../pico-sdk/src/rp2_common/pico_bootrom"
+		}
+	],
+	"settings": {}
+}
